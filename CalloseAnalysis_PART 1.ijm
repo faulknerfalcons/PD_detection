@@ -1,13 +1,14 @@
-// Author: Matthew Johnston, Faulkner Group
+// Author: Matthew Johnston, Faulkner Group (John Innes Centre)
 // 13/08/19
 // Callose Analysis
 
-//modified by Annalisa 12/02/2020 to add the following features:
+//modified by Annalisa Bellandi, Faulkner Group (John Innes Centre) 12/02/2020 
+//Added modification regard the following features:
 //possibility to select PD based on shape, in oreder to exclude signals that are long and thin (see shape factor)
 //possibility to automatically split the channels of your Z stacks - this is useful if you recorderd z stacks with more than one channel. If you run Matt's script on those multichannels files the script will get confusd on which channel to consider
 //possibility to define the extension of the files to process: this is useful if your files are not .czi, for example once you splitted your channels the extension it is not .czi anymore but .tif
 
-//this script is now made of two sections that can be run separtely or as one unique analysis process. If you want to run a section, highlight it and hit 'run selected code'. If you want to run all, just hit 'run'
+//This script is now made of two sections that can be run separtely or as one unique analysis process. If you want to run a section, highlight it and hit 'run selected code'. If you want to run all, just hit 'run'
 //both sections of the script will ask you to select an input and output folder
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------
@@ -55,9 +56,9 @@ list = getFileList(input_folder);
 
 dir = getDirectory("Choose input folder, files ready for PD detection")
 file_extension = ".tif" //this has to match the extension of the files you want to process
-threshold = 5000;
-minsize = 8;
-maxsize = 250;
+threshold = 5000; //minimum intensity considered when detecting aprticles
+minsize = 8; //minimum pixel numbers considered when detecting particles
+maxsize = 250; //maximum pixel numbers considered when detecting particles
 shape = 0.00 //this controls the circularity of the items that you want to select: 0 is thin and long, 1 is perfect circle. Change to 0.00 if you don't wish to exclude anything based on the shape, increase up to 1 for selecting only more circular items
 printOut = true; //change to false if you wish (quicker run time, not saving mask with selected PD)
 if (printOut) {
