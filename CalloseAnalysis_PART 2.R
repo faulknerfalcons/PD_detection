@@ -1,12 +1,13 @@
-#
-# Script for PD callose analysis, updated t 12/05/2021
+# Authors: Matthew Johnston, Faulkner group (John Innes Centre)
+# Annotated, modified and updated by Annalisa Bellandi, Faulkner group (John Innes Centre)
+# Updated 12/05/2021
 
 # In this script there are 4 parts:
 
 # 1. packages that you need to run this script
-# 2. colour palette set up that you need if you want to make plots with the colours that I like
-# 3. Matt's method of summarising and plotting the data
-# 4. Annalisa's method to plot the data following Matt's analysis
+# 2. suggested colour palette set up
+# 3. Matthew Johnston method of summarising and plotting the data
+# 4. Annalisa Bellandi method to plot the data following Matthew Johnston's analysis
 
 # Run part 1 and 2, then copy your data and proceed with part 3 and 4
 
@@ -20,8 +21,8 @@ library("RColorBrewer")
 library('ggsignif')
 library('tidyverse')
 library("svglite")
-library(gridExtra)
-library(grid)
+library("gridExtra")
+library("grid")
 
 
 
@@ -79,7 +80,7 @@ my_colors_plot
 
 
 #========================================== PART 3
-#-----------------------------------  Matt's analysis and plotting
+#-----------------------------------  Matthew Johnston analysis and plotting
 
 
 
@@ -90,8 +91,6 @@ data<-read.table("clipboard",header=T,sep = "\t")
 #this line shows you the first rows of your data
 head(data)
 
-
-#this is how Matt set up the analysis:
 #takes your data
 numeric <- data %>% 
 #groups them by the name column
@@ -113,7 +112,7 @@ data_sum<-inner_join(numeric, data, by = c("Name")) %>% distinct(Name,.keep_all 
 head(data_sum)
 tail(data_sum)
 
-#Matt's Anova for stat analysis
+#Matthew Johnston's Anova for statistical analysis
 num_pdsig<-if(anova(lm(num_pd~Geno, data_sum))[5][1,1]<0.05){"SIG"}else{"NOT SIG"}
 mean_avintensig<-if(anova(lm(mean_avinten~Geno, data_sum))[5][1,1]<0.05){"SIG"}else{"NOT SIG"}
 mean_intdensig<-if(anova(lm(mean_intden~Geno, data_sum))[5][1,1]<0.05){"SIG"}else{"NOT SIG"}
@@ -121,7 +120,7 @@ mean_areasig<-if(anova(lm(mean_area~Geno, data_sum))[5][1,1]<0.05){"SIG"}else{"N
 image_intdensig<-if(anova(lm(image_intden~Geno, data_sum))[5][1,1]<0.05){"SIG"}else{"NOT SIG"}
 area_pdsig<-if(anova(lm(area_pd~Geno, data_sum))[5][1,1]<0.05){"SIG"}else{"NOT SIG"}
 
-#Matt's plots - please note all these metrics are either per image or per zslice or per zstack or per leaf... it depends on what you put in the name column or on what grouoing variable you chose!!
+#Matthew Johsnton's plots - please note all these metrics are either per image or per zslice or per zstack or per leaf... it depends on what you put in the name column or on what grouoing variable you chose!!
 
 #numer of detected particles in each image/zslice/zstack: this is a controversial metric, be careful
 num_pd<-ggplot(data_sum, aes(x=Geno, y=num_pd,))+geom_boxplot()+xlab("Genotype")+theme_bw()+ guides(shape=FALSE)+geom_jitter(width=0.1, alpha=.4)+ylab("Number of detected callose deposits per image")+ggtitle(num_pdsig)
@@ -148,28 +147,25 @@ grid.arrange(num_pd,mean_avinten,mean_intden,mean_area,image_intden,area_pd, nco
 
 
 #========================================== PART 4
-#-----------------------------------  My plots (Annalisa)
+#-----------------------------------  Annalisa Bellandi's plotting method
 
 
-#The data elaborated with Matt's method are plotted singlularly instead of in a grid
-#I used wilcoxon rank sum test as analysis
-#I save the plots in svg png and pdf formats
+#The data elaborated with Matthew Johnston's method are plotted singlularly instead of in a grid
+#Wilcoxon rank sum test is used for statistical comparisons
 
 
 #============= TO MANUALLY SET BEFORE RUNNING
 
 #set the name of your experiment
-EXP <- 'Effector PD callose' #insert your exp title between ''
+EXP <- ' ' #insert your exp title between ''
 
 #set your working directory (where do you want your plots to be saved)
-setwd("C:/Users/bellanda/Desktop/xiaokun_troubleshoot") #insert your path between the ''
+setwd(" ") #insert your path between the ''
 
 #For each plot you need to manually type 
   #The labels of the x axis and the comparisons you want to make
   #The label of the y axis depending on your grouping variable you chose
   #you may need to adjust the length of the y axis and position of the stat results 
-
-
 
 #============= PLOTS
 
@@ -183,18 +179,13 @@ num_pd_wil <- ggplot(data_sum, mapping=aes(x=Geno, y=num_pd, color=Geno))+
   guides(shape=FALSE)+
   geom_jitter(width=0.1, alpha=.4)+
   ylab("n callose deposits") +
-  #set the labels that you want here
-  #scale_x_discrete(labels=c("30-23_1-2",'30-23_2-1','GFP')) +
   ggtitle("Number of Callose deposits per image")+
   theme(plot.title = element_text(hjust = 0.4))+
   coord_cartesian(ylim=c(0,1750)) +
   theme(legend.position = "none")+
-  #set the comparisosns that you want to make here
-  geom_signif(comparisons =list(c("30-23_1-2", "GFP")),
-              step_increase = 0.1, map_signif_level=c("***"=0.001, "**"=0.01, "*"=0.05, "NS"<0.05), test = 'wilcox.test', color='black',size = 1, y_position = 1250, textsize = 7) + #default is to wilcoxon test
-geom_signif(comparisons =list(c("30-23_2-1", "GFP")),
-            step_increase = 0.1, map_signif_level=c("***"=0.001, "**"=0.01, "*"=0.05, "NS"<0.05), test = 'wilcox.test', color='black',size = 1, y_position = 1550, textsize = 7) #default is to wilcoxon test
-
+  #manually set the comparisosns that you want to make here and manually adjust the y postion where you want the result of the comaprison to be displayed
+  geom_signif(comparisons =list(c(" ", " ")),
+              step_increase = 0.1, map_signif_level=c("***"=0.001, "**"=0.01, "*"=0.05, "NS"<0.05), test = 'wilcox.test', color='black',size = 1, y_position = 1250, textsize = 7)
 
 num_pd_wil
 
@@ -215,8 +206,6 @@ ggsave(paste(EXP,"number deposits_wilcox", ".pdf"), num_pd_wil, width = 8, heigh
 
 
 
-
-
 #average intensity of callose deposits plot
 int_pd_wil <- ggplot(data_sum, mapping=aes(x=Geno, y=mean_intden, color=Geno))+
   geom_boxplot(data_sum, mapping=aes(x=Geno, y=mean_intden, color=Geno))+
@@ -227,17 +216,14 @@ int_pd_wil <- ggplot(data_sum, mapping=aes(x=Geno, y=mean_intden, color=Geno))+
   guides(shape=FALSE)+
   geom_jitter(width=0.1, alpha=.4)+
   ylab("intensity [AU]") +
-  #set the labels that you want here
-  scale_x_discrete(labels=c("30-23_1-2",'30-23_2-1','GFP')) +
   ggtitle("Intensity of aniline blue per deposit")+
   theme(plot.title = element_text(hjust = 0.4))+
+  #adjust length of axis if needed
   coord_cartesian(ylim=c(500,12800)) +
   theme(legend.position = "none")+
-  #set the comparisosns that you want to make here
-  geom_signif(comparisons =list(c("30-23_1-2", "GFP")),
-              step_increase = 0.1, map_signif_level=c("***"=0.001, "**"=0.01, "*"=0.05, "NS"<0.05), test = 'wilcox.test', color='black',size = 1, y_position = 9000, textsize = 7) + #default is to wilcoxon test
-  geom_signif(comparisons =list(c("30-23_2-1", "GFP")),
-              step_increase = 0.1, map_signif_level=c("***"=0.001, "**"=0.01, "*"=0.05, "NS"<0.05), test = 'wilcox.test', color='black',size = 1, y_position = 10850, textsize = 7) #default is to wilcoxon test
+  #manually set the comparisosns that you want to make here and manually adjust the y postion where you want the result of the comaprison to be displayed
+  geom_signif(comparisons =list(c(" ", " ")),
+              step_increase = 0.1, map_signif_level=c("***"=0.001, "**"=0.01, "*"=0.05, "NS"<0.05), test = 'wilcox.test', color='black',size = 1, y_position = 9000, textsize = 7)
 
 int_pd_wil
 
