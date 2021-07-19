@@ -3,7 +3,7 @@
 // Callose Analysis
 
 //modified by Annalisa Bellandi, Faulkner Group (John Innes Centre) 12/02/2020 
-//Added modification regard the following features:
+//Added modifications regard the following features:
 //possibility to select PD based on shape, in oreder to exclude signals that are long and thin (see shape factor)
 //possibility to automatically split the channels of your Z stacks - this is useful if you recorderd z stacks with more than one channel. If you run Matt's script on those multichannels files the script will get confusd on which channel to consider
 //possibility to define the extension of the files to process: this is useful if your files are not .czi, for example once you splitted your channels the extension it is not .czi anymore but .tif
