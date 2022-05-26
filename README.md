@@ -35,4 +35,5 @@ Once your excel file is ready select and copy the whole excel file for the colum
 Further explanations and details are annotated in the scripts.
 
 
-*insert DOI here*
+[![DOI](https://zenodo.org/badge/387481594.svg)](https://zenodo.org/badge/latestdoi/387481594)
+
