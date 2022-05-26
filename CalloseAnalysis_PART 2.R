@@ -86,6 +86,28 @@ my_colors_plot
 
 
 #------------------  !!  MANUALLY COPY YOUR DATA FROM EXCEL BEFORE RUNNING THIS !!
+#your excel file will have one row for each detected particle and 7 columns:
+
+#Label: the name of your particle, is a combination of leaf number, sample number and particle number in that sample
+#Area
+#Mean
+#Max
+#Min
+#IntDen
+#RawIntDen
+
+#For you file to be compatible with the script straight away, we reccomend that you insert 3 empty columns after the Label column and name them
+#Geno: the genotype or condition fo your sample
+#Leaf: the leaf number 
+#Name: the leaf number AND sample number, so this is a unique identifier for each image taken
+
+#we usually take at least 2 images per leaf wo we would have leaf1_sample1 and leaf2_sample2 etc for each leaf
+
+#selct and copy the whole excel file for the columns from Geno to RawIntDen
+
+#------------------------------------------------------------ ready to start
+
+
 
 #this line takes your data from the clipboard and loads them into R
 data<-read.table("clipboard",header=T,sep = "\t")
